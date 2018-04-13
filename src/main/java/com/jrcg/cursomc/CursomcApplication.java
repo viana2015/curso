@@ -11,10 +11,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.jrcg.cursomc.domain.Categoria;
 import com.jrcg.cursomc.domain.Cidade;
+import com.jrcg.cursomc.domain.Cliente;
+import com.jrcg.cursomc.domain.Endereco;
 import com.jrcg.cursomc.domain.Estado;
 import com.jrcg.cursomc.domain.Produto;
+import com.jrcg.cursomc.domain.enums.TipoCliente;
 import com.jrcg.cursomc.repositories.CategoriaRepository;
 import com.jrcg.cursomc.repositories.CidadeRepository;
+import com.jrcg.cursomc.repositories.ClienteRepository;
+import com.jrcg.cursomc.repositories.EnderecoRepository;
 import com.jrcg.cursomc.repositories.EstadoRepository;
 import com.jrcg.cursomc.repositories.ProdutoRepository;
 
@@ -32,6 +37,13 @@ public class CursomcApplication implements CommandLineRunner {
 	
 	@Autowired
 	private EstadoRepository estadoRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -64,11 +76,19 @@ public class CursomcApplication implements CommandLineRunner {
 		est1.getCidades().addAll(Arrays.asList(c1));
 		est2.getCidades().addAll(Arrays.asList(c2, c3));
 		
+		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("22347756", "993445522"));
+		
+		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 201", "Camorin", "20720350", cli1, c1);
+		Endereco e2 = new Endereco(null, "Avenida MAtos", "105", "Sala 201", "Centro", "22350001", cli1, c2);
+		
+		cli1.getEndereco().addAll(Arrays.asList(e1, e2));
+		
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
-		
-		
+		clienteRepository.saveAll(Arrays.asList(cli1));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 	}
 }
